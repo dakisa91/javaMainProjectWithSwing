@@ -46,7 +46,7 @@ public class mainFrame extends javax.swing.JFrame {
 				//TODO remove after
 				int col = jTable1.getSelectedColumn();
 				int row = jTable1.getSelectedRow();
-				Object value = jTable1.getModel().getValueAt(row, col);
+			//	Object value = jTable1.getModel().getValueAt(row, col);
 			//	Object value2 = jTable1.getValueAt(row, col);  // not sure if i use getValueAt(...) with or without getModel()
 				
 			//	JOptionPane.showMessageDialog(jPanel1, value);
@@ -271,7 +271,24 @@ public class mainFrame extends javax.swing.JFrame {
 		}
 		else
 		{
-			((DefaultTableModel) jTable1.getModel()).removeRow(selectedRow);
+			//get the id
+			Object temp = jTable1.getModel().getValueAt(selectedRow, 0);
+			String id = temp.toString();
+			//do query
+			Statement stmt;
+			String query;
+			query = "DELETE FROM user WHERE id = " + id;
+
+			// make a statement with the server
+			try{
+				stmt = con.createStatement();
+				// execute the query and return the result
+				stmt.executeUpdate(query);
+				runQuery();
+				((DefaultTableModel) jTable1.getModel()).removeRow(selectedRow);
+			} catch ( Exception e){
+				System.err.println("Exception: " + e.getMessage());
+			}
 		}
 		
 	}//GEN-LAST:event_jButton2ActionPerformed
